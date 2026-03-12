@@ -7,29 +7,41 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/users", (req, res) => {
-  console.log("GET request received on /users");
-  db.all("SELECT * FROM users", (err, rows) => {
-    if (err) {
-      console.log("Error on db: "+ err);
-      return res.status(500).json(err);
+app.get("/lists", (req, res) => {
+  db.all(
+    "SELECT id, title, description FROM lists ORDER BY id DESC",
+    (err, rows) => {
+      if (err) {
+        console.error("Database error on GET /lists:", err);
+        return res.status(500).json({ error: "database error" });
+      }
+
+      return res.json(rows);
     }
-    res.json(rows);
-  });
+  );
 });
 
-app.post("/users", (req, res) => {
-  const { name } = req.body;
+app.post("/lists", (req, res) => {
+  const title = req.body?.title?.trim();
+  const description = req.body?.description?.trim() || null;
+
+  if (!title) {
+    return res.status(400).json({ error: "title is required" });
+  }
 
   db.run(
-    "INSERT INTO users(name) VALUES(?)",
-    [name],
+    "INSERT INTO lists(title, description) VALUES(?, ?)",
+    [title, description],
     function (err) {
-      if (err) return res.status(500).json(err);
+      if (err) {
+        console.error("Database error on POST /lists:", err);
+        return res.status(500).json({ error: "database error" });
+      }
 
-      res.json({
+      return res.status(201).json({
         id: this.lastID,
-        name
+        title,
+        description
       });
     }
   );

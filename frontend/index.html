@@ -1,16 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Users</title>
+  <title>Todo List Manager</title>
 </head>
 <body>
 
-<h1>User List</h1>
+<h1>Crea una lista</h1>
 
-<button id="load">Load Users</button>
+<form id="create-list-form">
+  <label for="title">Titolo lista</label>
+  <br>
+  <input id="title" name="title" type="text" required>
+  <br><br>
+
+  <label for="description">Descrizione</label>
+  <br>
+  <textarea id="description" name="description" rows="4"></textarea>
+  <br><br>
+
+  <button type="submit">Crea lista</button>
+</form>
+
+<h2>Liste esistenti</h2>
+<ul id="lists-output"></ul>
 
 <pre id="output"></pre>
 
+<script src="api.js"></script>
 <script src="main.js"></script>
 
 </body>
