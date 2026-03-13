@@ -20,6 +20,47 @@ async function loadLists() {
       deleteButton.type = "button";
       deleteButton.textContent = "Elimina";
       deleteButton.style.marginLeft = "10px";
+      const editButton = document.createElement("button");
+      editButton.type = "button";
+      editButton.textContent = "Modifica";
+      editButton.style.marginLeft = "10px";
+      editButton.addEventListener("click", async () => {
+        const newTitle = window.prompt("Nuovo titolo lista:", list.title);
+        if (newTitle === null) {
+          return;
+        }
+
+        const trimmedTitle = newTitle.trim();
+        if (!trimmedTitle) {
+          output.textContent = "Il titolo non puo essere vuoto";
+          return;
+        }
+
+        const currentDescription = list.description ?? "";
+        const newDescription = window.prompt(
+          "Nuova descrizione lista:",
+          currentDescription
+        );
+        if (newDescription === null) {
+          return;
+        }
+
+        try {
+          const updatedList = await apiRequest(
+            `http://localhost:3000/lists/${list.id}`,
+            "PUT",
+            {
+              title: trimmedTitle,
+              description: newDescription.trim()
+            }
+          );
+          output.textContent = `Lista "${updatedList.title}" modificata con successo`;
+          await loadLists();
+        } catch (error) {
+          output.textContent = `Errore durante modifica: ${error.message}`;
+        }
+      });
+
       deleteButton.addEventListener("click", async () => {
         const confirmDelete = window.confirm(
           `Vuoi eliminare la lista "${list.title}"?`
@@ -39,6 +80,7 @@ async function loadLists() {
       });
 
       li.appendChild(textNode);
+      li.appendChild(editButton);
       li.appendChild(deleteButton);
       listsOutput.appendChild(li);
     }
