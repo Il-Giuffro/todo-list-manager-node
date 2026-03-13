@@ -9,9 +9,37 @@ async function loadLists() {
 
     for (const list of lists) {
       const li = document.createElement("li");
-      li.textContent = list.description
+      const listText = list.description
         ? `${list.title} - ${list.description}`
         : list.title;
+
+      const textNode = document.createElement("span");
+      textNode.textContent = listText;
+
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.textContent = "Elimina";
+      deleteButton.style.marginLeft = "10px";
+      deleteButton.addEventListener("click", async () => {
+        const confirmDelete = window.confirm(
+          `Vuoi eliminare la lista "${list.title}"?`
+        );
+
+        if (!confirmDelete) {
+          return;
+        }
+
+        try {
+          await apiRequest(`http://localhost:3000/lists/${list.id}`, "DELETE");
+          output.textContent = `Lista "${list.title}" eliminata con successo`;
+          await loadLists();
+        } catch (error) {
+          output.textContent = `Errore durante eliminazione: ${error.message}`;
+        }
+      });
+
+      li.appendChild(textNode);
+      li.appendChild(deleteButton);
       listsOutput.appendChild(li);
     }
   } catch (error) {
@@ -31,7 +59,7 @@ form.addEventListener("submit", async (event) => {
       description
     });
 
-    output.textContent = `Lista creata con successo:\n${JSON.stringify(createdList, null, 2)}`;
+    output.textContent = `Lista "${createdList.title}" creata con successo`;
     form.reset();
     await loadLists();
   } catch (error) {
