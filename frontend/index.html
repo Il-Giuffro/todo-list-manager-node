@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Todo List Manager</title>
 </head>
 <body>
@@ -23,6 +24,35 @@
 
 <h2>Liste esistenti</h2>
 <ul id="lists-output"></ul>
+
+<h2>Lista selezionata</h2>
+<div id="selected-list-output">Nessuna lista selezionata</div>
+
+<h2>Crea un elemento</h2>
+<form id="create-item-form">
+  <label for="item-list-id">Id lista</label>
+  <br>
+  <input id="item-list-id" name="item-list-id" type="number" min="1" required>
+  <br><br>
+
+  <label for="item-text">Testo elemento</label>
+  <br>
+  <input id="item-text" name="item-text" type="text" required>
+  <br><br>
+
+  <label for="item-status">Stato</label>
+  <br>
+  <select id="item-status" name="item-status">
+    <option value="todo">todo</option>
+    <option value="done">done</option>
+  </select>
+  <br><br>
+
+  <button type="submit">Crea elemento</button>
+</form>
+
+<h2>Elementi della lista selezionata</h2>
+<ul id="items-output"></ul>
 
 <pre id="output"></pre>
 

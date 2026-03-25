@@ -1,8 +1,8 @@
 {
-  "name": "fullstack-demo",
+  "name": "todo-list-manager-node",
   "version": "1.0.0",
-  "description": "backend/server.js",
-  "main": "index.js",
+  "description": "Applicazione semplice per gestire liste todo e relativi elementi",
+  "main": "backend/server.js",
   "scripts": {
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "backend": "nodemon backend/server.js",
